@@ -5,9 +5,14 @@ import java.util.Scanner;
 public class GameSettings {
 
     private final Hangman hangman;
+    private final StatisticsReader statisticsReader;
 
-    public GameSettings() {
-        hangman = new Hangman(new DictionaryReader("src/main/resources/russian.txt"));
+    public GameSettings(StatisticsReader statisticsReader) {
+        this.statisticsReader = statisticsReader;
+        hangman = new Hangman(
+                new DictionaryReader("src/main/resources/longwords.txt"),
+                new StatisticsWriter("src/main/resources/"),
+                statisticsReader);
     }
 
     public void menu() {
@@ -17,12 +22,13 @@ public class GameSettings {
         if (input.equalsIgnoreCase("y")) {
             while (true) {
                 System.out.println("Выберите режим игры:");
-                System.out.println("1) открыть 2 любые буквы слова.");
-                System.out.println("2) Не открывать 2 любые буквы слова\n");
+                System.out.println("1) показать статистику");
+                System.out.println("2) играть в игру\n");
                 System.out.println("Введите n, чтобы выйти из игры");
                 input = scanner.nextLine();
                 if (input.equalsIgnoreCase("1")) {
-                    // добавить второй режим
+                    statisticsReader.printWins();
+                    statisticsReader.printLoses();
                 } else if (input.equalsIgnoreCase("2")) {
                     printBaseGameRules();
                     hangman.play();
